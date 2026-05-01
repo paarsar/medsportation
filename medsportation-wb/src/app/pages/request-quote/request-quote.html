@@ -1,0 +1,204 @@
+<div class="w-full max-w-[1200px] mb-10 mx-auto pt-10 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Request a Quote</h1>
+  <p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl">
+    Tell us about your specialized logistics needs. Whether it's temperature-sensitive pharmaceuticals or sports medicine equipment, we deliver with precision.
+  </p>
+</div>
+
+<div class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+  <div *ngIf="submitSuccess" class="mb-8 p-6 bg-green-50 border border-green-200 rounded-xl text-green-800 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">check_circle</span>
+    <div>
+      <h3 class="font-bold text-lg">Quote Request Submitted!</h3>
+      <p>Thank you for reaching out. Our dispatch team will review your request and contact you within 30 minutes.</p>
+    </div>
+  </div>
+
+  <div *ngIf="submitError" class="mb-8 p-6 bg-red-50 border border-red-200 rounded-xl text-red-800 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">error</span>
+    <div>
+      <h3 class="font-bold text-lg">Submission Error</h3>
+      <p>There was a problem sending your request. Please try again or call us directly at (555) 123-4567.</p>
+    </div>
+  </div>
+
+  <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Main Form Column -->
+    <div class="lg:col-span-8 space-y-8">
+      <!-- Organization Details Section -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="size-10 rounded-full flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">business</span>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Organization Details</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Organization Name*</span>
+            <input formControlName="organizationName" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400" placeholder="e.g., Central NJ Hospital" type="text"/>
+            <div *ngIf="quoteForm.get('organizationName')?.touched && quoteForm.get('organizationName')?.errors?.['required']" class="text-xs text-red-500 mt-1">Required</div>
+          </label>
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Organization Type*</span>
+            <select formControlName="organizationType" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary">
+              <option>Hospital / Medical Center</option>
+              <option>Sports Team / Facility</option>
+              <option>Laboratory</option>
+              <option>Pharmacy</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Contact Person*</span>
+            <input formControlName="contactPerson" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400" placeholder="Full Name" type="text"/>
+            <div *ngIf="quoteForm.get('contactPerson')?.touched && quoteForm.get('contactPerson')?.errors?.['required']" class="text-xs text-red-500 mt-1">Required</div>
+          </label>
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Email Address*</span>
+            <input formControlName="email" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400" placeholder="name@company.com" type="email"/>
+            <div *ngIf="quoteForm.get('email')?.touched && quoteForm.get('email')?.errors" class="text-xs text-red-500 mt-1">
+              <span *ngIf="quoteForm.get('email')?.errors?.['required']">Required</span>
+              <span *ngIf="quoteForm.get('email')?.errors?.['email']">Invalid email format</span>
+            </div>
+          </label>
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Phone Number*</span>
+            <input formControlName="phone" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400" placeholder="(555) 000-0000" type="tel"/>
+            <div *ngIf="quoteForm.get('phone')?.touched && quoteForm.get('phone')?.errors?.['required']" class="text-xs text-red-500 mt-1">Required</div>
+          </label>
+        </div>
+      </div>
+      <!-- Service Requirements Section -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="size-10 rounded-full flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">local_shipping</span>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Logistics Requirements</h3>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 block">Service Needed*</span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <label class="relative flex cursor-pointer rounded-lg border border-slate-200 dark:border-slate-700 p-4 shadow-sm focus:outline-none bg-slate-50 dark:bg-slate-800 hover:border-primary/50">
+                <input class="sr-only peer" formControlName="serviceType" value="Stat / Rush" type="radio"/>
+                <div class="flex flex-col peer-checked:text-primary">
+                  <span class="block text-sm font-medium text-slate-900 dark:text-white">Stat / Rush</span>
+                  <span class="mt-1 flex items-center text-xs text-slate-500 dark:text-slate-400">Immediate pickup & delivery</span>
+                </div>
+                <div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+              </label>
+              <label class="relative flex cursor-pointer rounded-lg border border-slate-200 dark:border-slate-700 p-4 shadow-sm focus:outline-none bg-slate-50 dark:bg-slate-800 hover:border-primary/50">
+                <input class="sr-only peer" formControlName="serviceType" value="Scheduled Route" type="radio"/>
+                <div class="flex flex-col peer-checked:text-primary">
+                  <span class="block text-sm font-medium text-slate-900 dark:text-white">Scheduled Route</span>
+                  <span class="mt-1 flex items-center text-xs text-slate-500 dark:text-slate-400">Recurring daily/weekly stops</span>
+                </div>
+                <div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+              </label>
+              <label class="relative flex cursor-pointer rounded-lg border border-slate-200 dark:border-slate-700 p-4 shadow-sm focus:outline-none bg-slate-50 dark:bg-slate-800 hover:border-primary/50">
+                <input class="sr-only peer" formControlName="serviceType" value="Next Flight Out" type="radio"/>
+                <div class="flex flex-col peer-checked:text-primary">
+                  <span class="block text-sm font-medium text-slate-900 dark:text-white">Next Flight Out</span>
+                  <span class="mt-1 flex items-center text-xs text-slate-500 dark:text-slate-400">Long distance critical</span>
+                </div>
+                <div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+              </label>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Pickup Address*</span>
+              <textarea formControlName="pickupAddress" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400 resize-none" placeholder="Enter full pickup address including suite/floor" rows="3"></textarea>
+              <div *ngIf="quoteForm.get('pickupAddress')?.touched && quoteForm.get('pickupAddress')?.errors?.['required']" class="text-xs text-red-500 mt-1">Required</div>
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Delivery Address*</span>
+              <textarea formControlName="deliveryAddress" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400 resize-none" placeholder="Enter full delivery address" rows="3"></textarea>
+              <div *ngIf="quoteForm.get('deliveryAddress')?.touched && quoteForm.get('deliveryAddress')?.errors?.['required']" class="text-xs text-red-500 mt-1">Required</div>
+            </label>
+          </div>
+          <div formGroupName="specialRequirements">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 block">Special Requirements</span>
+            <div class="flex flex-wrap gap-3">
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <input formControlName="tempControlled" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+                <span class="text-sm text-slate-700 dark:text-slate-300">Temperature Controlled</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <input formControlName="chainOfCustody" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+                <span class="text-sm text-slate-700 dark:text-slate-300">Chain of Custody</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <input formControlName="hazmat" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+                <span class="text-sm text-slate-700 dark:text-slate-300">Hazmat Certified</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <input formControlName="waitAndReturn" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+                <span class="text-sm text-slate-700 dark:text-slate-300">Wait & Return</span>
+              </label>
+            </div>
+          </div>
+          <label class="block">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">Additional Notes</span>
+            <textarea formControlName="additionalNotes" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-primary placeholder:text-slate-400" placeholder="Please describe any specific handling instructions..." rows="4"></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md text-center sm:text-left">
+          By submitting this form, you agree to our <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+        </p>
+        <button [disabled]="isSubmitting" type="submit" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none">
+          <span *ngIf="!isSubmitting">Submit Quote Request</span>
+          <span *ngIf="isSubmitting" class="flex items-center gap-2">
+            <span class="animate-spin inline-block size-4 border-2 border-white border-t-transparent rounded-full"></span>
+            Processing...
+          </span>
+        </button>
+      </div>
+    </div>
+    <!-- Right Sidebar -->
+    <aside class="lg:col-span-4 space-y-8">
+      <!-- Contact Info Card -->
+      <div class="bg-slate-900 text-white rounded-xl p-6 sm:p-8 shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all duration-700"></div>
+        <h3 class="text-xl font-bold mb-6 relative z-10">Dispatch & Support</h3>
+        <div class="space-y-6 relative z-10">
+          <div class="flex items-start gap-4">
+            <div class="p-2 bg-white/10 rounded-lg">
+              <span class="material-symbols-outlined text-primary">call</span>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400 mb-1">24/7 Dispatch Line</p>
+              <a class="text-lg font-bold hover:text-primary transition-colors" href="tel:555-123-4567">(555) 123-4567</a>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="p-2 bg-white/10 rounded-lg">
+              <span class="material-symbols-outlined text-primary">mail</span>
+            </div>
+            <div>
+              <p class="text-sm text-slate-400 mb-1">Quote Inquiries</p>
+              <a class="text-lg font-bold hover:text-primary transition-colors text-wrap break-all" href="mailto:quotes@medsportation.com">quotes@medsportation.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 relative z-10">
+          <p class="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Service Hours</p>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li class="flex justify-between">
+              <span>Mon - Fri</span>
+              <span class="text-white font-medium">24 Hours</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Sat - Sun</span>
+              <span class="text-white font-medium">24 Hours</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </form>
+</div>
