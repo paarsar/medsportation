@@ -19,7 +19,7 @@ build:
 # Deploy to Cloudflare Pages
 deploy: build
 	@echo "Deploying to Cloudflare Pages..."
-	npx wrangler pages deploy $(BUILD_DIR) --project-name $(PROJECT_NAME)
+	npx wrangler pages deploy $(BUILD_DIR) --branch=production --project-name $(PROJECT_NAME)
 
 # Clean build artifacts
 clean:

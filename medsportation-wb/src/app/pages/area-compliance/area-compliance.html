@@ -13,12 +13,14 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
     <!-- Left Column: Service Area Map & Details -->
     <div class="lg:col-span-5 flex flex-col gap-6">
-      <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 relative aspect-[4/5] group">
-        <!-- Simulated Map Image -->
-        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Map of Central New Jersey area" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBOUeNCT4cZnST1G3DqC9iysfpeyz4J_kCKdVkHVB43UlpoOPSz05VXXZQPJ04D8CEjw9t3r2ArAUZ3zr-F6H5oiK22ZoQkUULsmJVDXy-1GdlAWY0QR1NEA3RD05FAJa4HxcrQtATQ7wgjG9k3U2fsqT4ii07XP8FVPQRAlf97IncZluiRk5rJQ909643Pejizv-woCud5M87c2W6NHkzxEp6deWHBNogpO92cQLCvo4BiHvFGjrdq4r09v779shK7JCg8OK_S9Q");'>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        <div class="absolute bottom-6 left-6 right-6 text-white">
+        <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-300 dark:border-slate-700 relative aspect-[4/5] group p-4 flex items-center justify-center">
+          <!-- Schematic Map Image -->
+          <img src="/nj-service-area.png" 
+               class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" 
+               alt="Schematic Map of New Jersey with Central Jersey area highlighted in red">
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-6 left-6 right-6 text-white">
           <div class="flex items-center gap-2 mb-2">
             <span class="material-symbols-outlined text-primary">location_on</span>
             <h3 class="text-xl font-bold">Central New Jersey</h3>
@@ -57,14 +59,14 @@
             Every driver undergoes rigorous, certified HIPAA training. We ensure total patient privacy and secure chain-of-custody for sensitive medical materials.
           </p>
         </div>
-        <!-- Card 2: GPS -->
+        <!-- Card 2: Transport Protocols -->
         <div class="flex flex-col p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-primary/50 transition-all duration-300 group">
           <div class="w-10 h-10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform bg-primary/10 dark:bg-primary/20">
             <span class="material-symbols-outlined">satellite_alt</span>
           </div>
-          <h3 class="text-slate-900 dark:text-white text-lg font-bold mb-2">Real-Time GPS Tracking</h3>
+          <h3 class="text-slate-900 dark:text-white text-lg font-bold mb-2">Secure Transport Protocols</h3>
           <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-            Our entire fleet is equipped with enterprise-grade GPS. Clients can monitor location status in real-time, ensuring transparency for critical deliveries.
+            Standardized pickup, handling, and delivery procedures help protect sensitive materials from origin to destination.
           </p>
         </div>
         <!-- Card 3: Temperature -->
@@ -96,11 +98,8 @@
     <h2 class="text-3xl font-bold mb-4 relative z-10">Ready to optimize your medical logistics?</h2>
     <p class="text-slate-300 max-w-xl mb-8 relative z-10">Get reliable, HIPAA-compliant transport services tailored to your specific needs.</p>
     <div class="flex flex-col sm:flex-row gap-4 relative z-10">
-      <button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-primary/90 transition-colors text-white text-base font-bold leading-normal" routerLink="/request-quote">
+      <button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-red-700 transition-colors text-white text-base font-bold leading-normal" routerLink="/request-quote">
         Request a Quote
-      </button>
-      <button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white/10 hover:bg-white/20 transition-colors text-white text-base font-bold leading-normal backdrop-blur-sm" routerLink="/partner">
-        Contact Sales
       </button>
     </div>
   </div>

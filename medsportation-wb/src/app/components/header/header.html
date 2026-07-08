@@ -1,9 +1,6 @@
 <header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur px-10 py-3">
-  <div class="flex items-center gap-4 cursor-pointer" routerLink="/">
-    <div class="size-8 text-primary">
-      <span class="material-symbols-outlined !text-[32px]">local_shipping</span>
-    </div>
-    <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Medsportation Logistics</h2>
+  <div class="flex items-center cursor-pointer" routerLink="/">
+    <img src="/logo-cropped.png" alt="Medsportation Logistics" class="h-[52px] w-auto" />
   </div>
   <div class="flex flex-1 justify-end gap-8 hidden md:flex">
     <nav class="flex items-center gap-9">
@@ -12,8 +9,10 @@
       <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-sm font-medium leading-normal transition-colors" routerLink="/area-compliance">Service Area</a>
       <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-sm font-medium leading-normal transition-colors" routerLink="/partner">Partner With Us</a>
     </nav>
-    <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors hover:bg-red-700" routerLink="/request-quote">
-      <span class="truncate">Request a Quote</span>
-    </button>
+    <div class="flex items-center gap-4">
+      <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors hover:bg-red-700" routerLink="/request-quote">
+        <span class="truncate">Request a Quote</span>
+      </button>
+    </div>
   </div>
 </header>

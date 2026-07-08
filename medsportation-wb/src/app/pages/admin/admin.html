@@ -1,0 +1,146 @@
+<div class="w-full max-w-[1440px] mx-auto py-10 px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Admin Dashboard</h1>
+      <div class="flex gap-4 mt-4">
+        <button (click)="view = 'quotes'" [class.text-primary]="view === 'quotes'" [class.border-primary]="view === 'quotes'" class="pb-2 px-1 font-bold text-sm border-b-2 transition-all">Quotes</button>
+        <button (click)="view = 'users'" [class.text-primary]="view === 'users'" [class.border-primary]="view === 'users'" class="pb-2 px-1 font-bold text-sm border-b-2 transition-all">Admin Users</button>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <button *ngIf="view === 'quotes'" (click)="exportToCSV()" class="flex items-center gap-2 px-4 py-2 text-sm font-bold bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+        <span class="material-symbols-outlined text-sm">download</span>
+        Export CSV
+      </button>
+      <button (click)="fetchQuotes()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" title="Refresh">
+        <span class="material-symbols-outlined">refresh</span>
+      </button>
+      <button (click)="logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-red-500">logout</span>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- QUOTES VIEW -->
+  <div *ngIf="view === 'quotes'">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+      <div class="animate-spin size-10 border-4 border-primary border-t-transparent rounded-full mb-4"></div>
+      <p class="text-slate-500">Loading quotes...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="p-6 bg-red-50 border border-red-200 rounded-xl text-red-800 flex items-center gap-4">
+      <span class="material-symbols-outlined text-3xl">error</span>
+      <div>
+        <h3 class="font-bold">Failed to load quotes</h3>
+        <p>There was an error connecting to the backend service.</p>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && !error && quotes.length === 0" class="text-center py-20 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <span class="material-symbols-outlined text-slate-300 text-6xl mb-4">description</span>
+      <p class="text-slate-500">No quotes found in the database.</p>
+    </div>
+
+    <!-- Quotes Table -->
+    <div *ngIf="!loading && !error && quotes.length > 0" class="overflow-x-auto bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Date</th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Organization</th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Contact</th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Service</th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Pickup & Delivery</th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+          <tr *ngFor="let quote of quotes" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors group">
+            <td class="p-4 align-top">
+              <div class="text-sm font-medium text-slate-900 dark:text-white">{{ quote.createdAt | date:'shortDate' }}</div>
+              <div class="text-xs text-slate-400">{{ quote.createdAt | date:'shortTime' }}</div>
+            </td>
+            <td class="p-4 align-top">
+              <div class="text-sm font-bold text-slate-900 dark:text-white">{{ quote.organizationName }}</div>
+              <div class="text-xs text-slate-500">{{ quote.organizationType }}</div>
+            </td>
+            <td class="p-4 align-top">
+              <div class="text-sm font-medium text-slate-900 dark:text-white">{{ quote.contactPerson }}</div>
+              <div class="text-xs text-slate-500">{{ quote.email }}</div>
+              <div class="text-xs text-slate-500">{{ quote.phone }}</div>
+            </td>
+            <td class="p-4 align-top">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-primary/10 text-primary">
+                {{ quote.serviceType }}
+              </span>
+            </td>
+            <td class="p-4 align-top max-w-xs">
+              <div class="text-xs text-slate-700 dark:text-slate-300">
+                <p><strong>From:</strong> {{ quote.pickupAddress }}</p>
+                <p><strong>To:</strong> {{ quote.deliveryAddress }}</p>
+              </div>
+            </td>
+            <td class="p-4 align-top">
+              <button (click)="deleteQuote(quote.id)" class="text-slate-400 hover:text-red-500 transition-colors">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USERS VIEW -->
+  <div *ngIf="view === 'users'" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-1">
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h3 class="text-lg font-bold mb-4">Create Admin User</h3>
+        <div *ngIf="userError" class="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-lg">{{ userError }}</div>
+        <form (ngSubmit)="onCreateUser()" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Username</label>
+            <input name="username" [(ngModel)]="newUser.username" type="text" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm p-3">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Password</label>
+            <input name="password" [(ngModel)]="newUser.password" type="password" class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm p-3">
+          </div>
+          <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-colors text-sm">
+            Create User
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="lg:col-span-2">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 dark:bg-slate-800">
+            <tr>
+              <th class="p-4 text-xs font-bold uppercase text-slate-500">Username</th>
+              <th class="p-4 text-xs font-bold uppercase text-slate-500">Created At</th>
+              <th class="p-4 text-xs font-bold uppercase text-slate-500 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            <tr *ngFor="let user of users">
+              <td class="p-4 font-medium">{{ user.username }}</td>
+              <td class="p-4 text-sm text-slate-500">{{ user.createdAt | date:'mediumDate' }}</td>
+              <td class="p-4 text-right">
+                <button *ngIf="user.username !== 'admin'" (click)="deleteUser(user.id)" class="text-slate-400 hover:text-red-500 transition-colors">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

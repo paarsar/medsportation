@@ -1,0 +1,26 @@
+# Antigravity/Gemini workspace files
+.gemini/
+skills/
+temp_design3/
+design.zip
+design2.zip
+design3.zip
+
+# IDEs
+.idea/
+.vscode/
+
+# Environment and databases
+.env
+*.db
+medsportation-be/.env
+medsportation-wb/medsportation.db
+medsportation-be/medsportation.db
+medsportation.db
+
+# Node dependencies and logs (for safety if run in root)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store

@@ -1,58 +1,59 @@
-# Medsportation Backend (Go Cloud Function)
+# Medsportation Backend (Go Gin + SQLite)
 
-This directory contains the Go source code for the "Request a Quote" backend, deployed as a serverless Google Cloud Function.
+This is a standalone web server that handles quote requests and stores them in a persistent SQLite database.
 
 ## Architecture
-- **Language:** Go 1.22+
-- **Infrastructure:** Google Cloud Functions (2nd Gen)
-- **Protocol:** SMTP (Standard Email protocol)
-- **Compatibility:** Works with GoDaddy (Microsoft 365), Gmail (App Passwords), and other SMTP providers.
+- **Framework:** Gin (Golang)
+- **Database:** SQLite (Persistent)
+- **ORM:** GORM
+- **Deployment:** Fly.io (Containerized)
 
-## Configuration
+## Operations via Makefile
 
-The backend uses environment variables for security. Create a `.env` file for local testing (see `.env.example`).
+A `Makefile` is provided to simplify common tasks.
 
-| Variable | Description | Example (GoDaddy/M365) |
-| :--- | :--- | :--- |
-| `SMTP_HOST` | The address of the mail server | `smtp.office365.com` |
-| `SMTP_PORT` | The server port (usually TLS) | `587` |
-| `SMTP_EMAIL` | The account sending the mail | `info@yourdomain.com` |
-| `SMTP_PASSWORD` | The account password (or App Password) | `your-secure-password` |
-| `NOTIFICATION_RECIPIENT` | Where the quote requests are sent | `quotes@medsportation.com` |
+### Local Development
+- **Run the server:** `make run`
+- **Build the binary:** `make build`
 
-### Note on GoDaddy / Microsoft 365
-If your GoDaddy email is powered by Microsoft 365:
-1. **MFA Enabled:** You **must** generate an "App Password" from your Microsoft security dashboard and use it as your `SMTP_PASSWORD`.
-2. **SMTP AUTH:** Microsoft often disables SMTP by default. Ensure "Authenticated SMTP" is enabled in the Microsoft 365 Admin Center for that specific user mailbox.
+### Fly.io Deployment
+- **Initial Setup:**
+  1. `fly launch --name medsportation-be --region ewr --no-deploy`
+  2. `make volume` (Creates the persistent SQLite volume)
+- **Deploy Updates:** `make deploy`
+- **Monitor Logs:** `make logs`
+- **Check Status:** `make status`
 
-## Local Testing
+## Production Database Management (Fly.io)
 
-1.  **Start the server:**
+### Database Path
+In production, the database is stored on a persistent volume.
+- **Path:** `/data/medsportation.db`
+- **Configuration:** Set via `DATABASE_PATH` secret or `fly.toml`.
+
+### Accessing the Production Database
+To inspect or manually modify the database on the live server:
+1.  **SSH into the instance:**
     ```bash
-    cd medsportation-be
-    go run cmd/main.go
+    fly ssh console
     ```
-2.  **The endpoint will be available at:** `http://localhost:8080/RequestQuote`
-3.  **Frontend Integration:** Ensure your Angular `QuoteService` points to this local URL during development.
+2.  **Open the database with SQLite:**
+    ```bash
+    sqlite3 /data/medsportation.db
+    ```
+3.  **Example: List all admin users:**
+    ```sql
+    SELECT id, username, created_at FROM users;
+    ```
 
-## Deployment
+### Adding Admin Users Manually
+Since passwords must be hashed with **Bcrypt**, you cannot simply insert a plain-text password via SQL. 
 
-To deploy the function to Google Cloud, run the following command from this directory:
+**Option 1: Automated Initial Admin**
+The server automatically creates `admin` with password `admin123` if the `users` table is empty.
 
-```bash
-gcloud functions deploy RequestQuote \
-  --gen2 \
-  --runtime=go122 \
-  --region=us-central1 \
-  --source=. \
-  --entry-point=RequestQuote \
-  --trigger-http \
-  --allow-unauthenticated \
-  --project 4420256990 \
-  --set-env-vars SMTP_HOST=smtp.office365.com,SMTP_PORT=587,SMTP_EMAIL=your-email@yourdomain.com,SMTP_PASSWORD=your-password,NOTIFICATION_RECIPIENT=quotes@medsportation.com
-```
+**Option 2: Creating a new user via SQL**
+If you need to add a user manually, you must first generate a Bcrypt hash. From the `fly ssh console`, you can use the application binary (if configured with a flag) or a simple SQL insert if you have a pre-computed hash.
 
-### Post-Deployment
-1.  Copy the **URL** provided by the `gcloud` command.
-2.  Update `medsportation-wb/src/app/services/quote.ts` with this URL.
-3.  Redeploy the frontend via `make deploy`.
+## Database Schema
+The server automatically creates and migrates the SQLite database file at the path specified by `DATABASE_PATH`.
